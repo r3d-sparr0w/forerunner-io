@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forerunner — Open-Source EDR/XDR</title>
+  <meta name="description" content="Forerunner is an open-source endpoint detection and response platform for modern infrastructure. Deploy in minutes, monitor everything." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --bg-card:   #161b22;
+      --bg-code:   #0a0e14;
+      --border:    #21262d;
+      --text:      #e6edf3;
+      --muted:     #7d8590;
+      --em:        #10b981;
+      --em-dim:    #059669;
+      --em-glow:   rgba(16,185,129,0.15);
+      --amber:     #f59e0b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--em); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo svg { color: var(--em); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      font-size: 0.875rem;
+      transition: color 0.15s;
+    }
+
+    nav ul a:hover { color: var(--text); text-decoration: none; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-em {
+      background: var(--em);
+      color: #fff;
+    }
+
+    .btn-em:hover { background: var(--em-dim); text-decoration: none; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { border-color: var(--muted); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--em-glow);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: var(--em);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 span { color: var(--em); }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    /* ── Install box ── */
+    .install-section {
+      max-width: 680px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+
+    .install-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .install-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .install-tab {
+      padding: 0.6rem 1.25rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+
+    .install-tab.active {
+      color: var(--em);
+      border-bottom-color: var(--em);
+    }
+
+    .install-pane { display: none; padding: 1.25rem; }
+    .install-pane.active { display: block; }
+
+    .code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+      font-size: 0.8rem;
+      color: #10b981;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .code-comment { color: var(--muted); }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      background: var(--border);
+      color: var(--muted);
+      border: none;
+      border-radius: 4px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover { background: var(--muted); color: var(--text); }
+
+    .install-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      padding: 0 0.25rem;
+    }
+
+    /* ── Features ── */
+    .features {
+      max-width: 960px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover { border-color: rgba(16,185,129,0.4); }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--em-glow);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      color: var(--em);
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-card p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── Release artifacts ── */
+    .artifacts {
+      max-width: 680px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+
+    .artifact-list {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .artifact-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    .artifact-row:last-child { border-bottom: none; }
+
+    .artifact-name {
+      font-family: monospace;
+      color: var(--em);
+    }
+
+    .artifact-desc { color: var(--muted); font-size: 0.8rem; }
+
+    /* ── Security note ── */
+    .security-note {
+      max-width: 680px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+
+    .security-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+
+    .security-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .security-card h3 svg { color: var(--em); }
+
+    .security-card p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a class="nav-logo" href="/">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5"/>
+      <path d="M2 12l10 5 10-5"/>
+    </svg>
+    Forerunner
+  </a>
+  <ul>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#security">Security</a></li>
+    <li>
+      <a class="btn btn-outline" href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">Open Source &bull; v0.2.0</div>
+  <h1>Endpoint detection &amp;<br><span>response</span> built to scale</h1>
+  <p class="subtitle">
+    Forerunner is an open-source EDR/XDR platform — deploy agents across your fleet in minutes,
+    correlate threats against MITRE ATT&amp;CK, and respond from a single dashboard.
+  </p>
+  <div class="hero-actions">
+    <a class="btn btn-em" href="#install">Get started</a>
+    <a class="btn btn-outline" href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener">View on GitHub</a>
+  </div>
+</section>
+
+<!-- Install -->
+<section class="install-section" id="install">
+  <div class="install-card">
+    <div class="install-tabs">
+      <button class="install-tab active" onclick="showTab('server')">Server</button>
+      <button class="install-tab" onclick="showTab('agent-linux')">Agent — Linux</button>
+      <button class="install-tab" onclick="showTab('agent-mac')">Agent — macOS</button>
+    </div>
+
+    <div class="install-pane active" id="pane-server">
+      <div class="code-block" id="code-server"><span class="code-comment"># Install the Forerunner server (TimescaleDB + Redis + server, all-in-one)</span>
+curl -sSL https://github.com/r3d-sparr0w/forerunner/releases/latest/download/install.sh \
+  | sudo bash -- --all-in-one</div>
+      <p class="install-note">
+        Supports Ubuntu 20.04+, Debian 11+, RHEL/Rocky 8+. Installs TimescaleDB, Redis, and the server
+        binary, generates TLS certificates, and starts a systemd service on port 443.
+      </p>
+    </div>
+
+    <div class="install-pane" id="pane-agent-linux">
+      <div class="code-block" id="code-agent-linux"><span class="code-comment"># From the Forerunner dashboard: Settings > Agents > Deploy Agent</span>
+<span class="code-comment"># Copy the generated command (includes your enrollment token and server URL):</span>
+curl -sSL \
+  -H "X-Enrollment-Token: &lt;token&gt;" \
+  "https://your-server/api/v1/install/linux-amd64" | sudo bash</div>
+      <p class="install-note">
+        The install command is generated per-platform in the dashboard and bundles your CA certificate,
+        enrollment token, and configuration. Linux agents run as a systemd service.
+      </p>
+    </div>
+
+    <div class="install-pane" id="pane-agent-mac">
+      <div class="code-block" id="code-agent-mac"><span class="code-comment"># From the Forerunner dashboard: Settings > Agents > Deploy Agent</span>
+curl -sSL \
+  -H "X-Enrollment-Token: &lt;token&gt;" \
+  "https://your-server/api/v1/install/darwin-arm64" | bash</div>
+      <p class="install-note">
+        macOS agents run as a LaunchDaemon. Apple Silicon and Intel binaries are available.
+        No sudo required for the install command itself.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+  <p class="section-sub">Built for security teams who want visibility without the complexity of commercial EDR.</p>
+  <div class="feature-grid">
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 6l11 7L23 6"/><rect x="1" y="6" width="22" height="14" rx="2" ry="2"/>
+        </svg>
+      </div>
+      <h3>Real-time telemetry</h3>
+      <p>Process, file, network, and log events streamed from agents via gRPC. Stored in TimescaleDB for high-throughput queries.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h3>Detection engine</h3>
+      <p>Write Sigma-style rules with MITRE ATT&amp;CK tagging. The engine evaluates every event and creates deduplicated alerts automatically.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <h3>Threat intelligence</h3>
+      <p>Track threat actor profiles with MITRE technique mappings. Alerts are automatically enriched with actor attribution when rules fire.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <h3>Embedded dashboard</h3>
+      <p>Single binary ships the full React dashboard. No separate web server needed — serve and API from the same port 443 endpoint.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3>Signed releases</h3>
+      <p>Every binary is signed with an Ed25519 key. The install script verifies signatures before execution — no blind pipe-to-bash.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+          <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+        </svg>
+      </div>
+      <h3>Distributed or all-in-one</h3>
+      <p>Run everything on one host with <code>--all-in-one</code>, or split DB, Redis, and the server across separate nodes for production scale.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Release artifacts -->
+<section class="artifacts" id="artifacts">
+  <h2 class="section-title" style="margin-bottom:1rem;">Release artifacts</h2>
+  <p class="section-sub" style="margin-bottom:2rem;">All binaries are signed. Verify with <code>signing.pub</code> before running.</p>
+  <div class="artifact-list">
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-server-linux-amd64</span>
+      <span class="artifact-desc">Server &mdash; Linux x86_64</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-server-linux-arm64</span>
+      <span class="artifact-desc">Server &mdash; Linux ARM64</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-server_*.deb</span>
+      <span class="artifact-desc">Debian/Ubuntu package (amd64)</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-server-*.rpm</span>
+      <span class="artifact-desc">RHEL/Rocky/Fedora package (x86_64)</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-agent-linux-amd64-musl</span>
+      <span class="artifact-desc">Agent &mdash; Linux x86_64 (static, any libc)</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-agent-linux-arm64</span>
+      <span class="artifact-desc">Agent &mdash; Linux ARM64</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-agent-darwin-arm64</span>
+      <span class="artifact-desc">Agent &mdash; macOS Apple Silicon</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-agent-darwin-amd64</span>
+      <span class="artifact-desc">Agent &mdash; macOS Intel</span>
+    </div>
+    <div class="artifact-row">
+      <span class="artifact-name">forerunner-agent-windows-amd64.exe</span>
+      <span class="artifact-desc">Agent &mdash; Windows x86_64</span>
+    </div>
+  </div>
+</section>
+
+<!-- Security -->
+<section class="security-note" id="security">
+  <div class="security-card">
+    <h3>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Verifying release signatures
+    </h3>
+    <p>
+      Every release artifact has a companion <code>.sig</code> file containing a base64-encoded Ed25519 signature.
+      The public key lives at <a href="/signing.pub">forerunner.offsetsec.io/signing.pub</a>.
+    </p>
+    <div class="code-block"><span class="code-comment"># Download the public key</span>
+curl -sSLO https://forerunner.offsetsec.io/signing.pub
+
+<span class="code-comment"># Verify a binary (e.g., the Linux amd64 agent)</span>
+base64 -d forerunner-agent-linux-amd64-musl.sig > sig.raw
+openssl pkeyutl -verify -pubin -inkey signing.pub \
+  -rawin -in forerunner-agent-linux-amd64-musl \
+  -sigfile sig.raw && echo "Signature valid"</div>
+    <p style="margin-top:0.75rem;">
+      The install scripts fetch <code>signing.pub</code> automatically and verify every artifact
+      before installation. You can also review the key fingerprint in the
+      <a href="https://github.com/r3d-sparr0w/forerunner/blob/main/keys/signing.pub" target="_blank" rel="noopener">source repository</a>.
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>
+    Forerunner is open-source software released under the
+    <a href="https://github.com/r3d-sparr0w/forerunner/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+    &nbsp;&bull;&nbsp;
+    <a href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener">GitHub</a>
+    &nbsp;&bull;&nbsp;
+    <a href="/signing.pub">signing.pub</a>
+    &nbsp;&bull;&nbsp;
+    <a href="https://github.com/r3d-sparr0w/forerunner/releases" target="_blank" rel="noopener">Releases</a>
+  </p>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.install-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.install-pane').forEach(p => p.classList.remove('active'));
+    document.getElementById('pane-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
