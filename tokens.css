@@ -1,0 +1,67 @@
+/* Hallmark · genre: atmospheric · theme: Midnight · macrostructure: Centered Hero + Card Grid
+ * nav: frosted-glass minimal · footer: Ft4 Dense colophon
+ * paper-band: dark · display-style: geometric-sans (Space Grotesk 700) + code-mono (JetBrains Mono)
+ * accent-hue: chromatic (cyan 193°) — matches Forerunner dashboard
+ */
+
+:root {
+  /* ── Colors (OKLCH) ── */
+  --color-paper:        oklch(12%  0.014 255);   /* near-black, cool blue-indigo */
+  --color-paper-2:      oklch(16%  0.016 252);   /* elevated surface */
+  --color-paper-3:      oklch(20%  0.017 248);   /* code block background */
+  --color-rule:         oklch(27%  0.013 245);   /* borders, hairlines */
+  --color-muted:        oklch(58%  0.010 230);   /* secondary UI, muted text */
+  --color-neutral:      oklch(73%  0.009 220);   /* body text */
+  --color-ink:          oklch(92%  0.006 210);   /* primary text, cool white */
+  --color-accent:       oklch(72%  0.17  210);   /* brand blue-cyan */
+  --color-accent-dim:   oklch(56%  0.14  210);   /* accent dim / visited */
+  --color-focus:        oklch(78%  0.16  210);   /* focus ring */
+
+  /* ── Typography ── */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body:    "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-code:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+  /* ── Scale (major third · 1.25) ── */
+  --text-xs:      0.64rem;   /*  ~10px */
+  --text-sm:      0.8rem;    /*  ~13px */
+  --text-base:    1rem;      /*   16px */
+  --text-md:      1.25rem;   /*   20px */
+  --text-lg:      1.5625rem; /*   25px */
+  --text-xl:      1.9531rem; /*   31px */
+  --text-2xl:     2.4414rem;
+  --text-3xl:     3.0518rem;
+  --text-display: clamp(2.75rem, 5vw + 1rem, 5.5rem);
+
+  /* ── Spacing (4 pt base) ── */
+  --space-3xs: 0.125rem;  /*  2px */
+  --space-2xs: 0.25rem;   /*  4px */
+  --space-xs:  0.5rem;    /*  8px */
+  --space-sm:  0.75rem;   /* 12px */
+  --space-md:  1rem;      /* 16px */
+  --space-lg:  1.5rem;    /* 24px */
+  --space-xl:  2.5rem;    /* 40px */
+  --space-2xl: 4rem;      /* 64px */
+  --space-3xl: 6rem;      /* 96px */
+  --space-4xl: 9rem;      /* 144px */
+
+  /* ── Motion ── */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro:   120ms;
+  --dur-short:   220ms;
+  --dur-long:    420ms;
+
+  /* ── Layout ── */
+  --header-height: 2.75rem;  /* 44px fixed header */
+  --sidebar-width: 13.5rem;  /* 216px sidebar */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --z-base:     1;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-modal:    400;
+  --z-toast:    500;
+}

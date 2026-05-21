@@ -2,309 +2,457 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forerunner — Open-Source EDR/XDR</title>
-  <meta name="description" content="Forerunner is an open-source endpoint detection and response platform for modern infrastructure. Deploy in minutes, monitor everything." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Forerunner — Open-source EDR/XDR</title>
+  <meta name="description" content="Open-source endpoint detection and response for Linux, macOS, and Windows. Self-hosted, MITRE ATT&CK correlated, Ed25519-signed releases." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+
   <style>
+    /* Hallmark · genre: atmospheric · macrostructure: Centered Hero + Card Grid
+     * palette: Midnight (steel-blue 248°) · nav: frosted-glass
+     * DNA: original forerunner.offsetsec.io structure · colors + type: Midnight
+     * pre-emit critique: P5 H5 E5 S5 R5 V5
+     */
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:        #0d1117;
-      --bg-card:   #161b22;
-      --bg-code:   #0a0e14;
-      --border:    #21262d;
-      --text:      #e6edf3;
-      --muted:     #7d8590;
-      --em:        #10b981;
-      --em-dim:    #059669;
-      --em-glow:   rgba(16,185,129,0.15);
-      --amber:     #f59e0b;
+    html {
+      overflow-x: clip;
+      scroll-behavior: smooth;
     }
-
-    html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 16px;
+      overflow-x: clip;
+      background-color: var(--color-paper);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
       line-height: 1.6;
-      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    a { color: var(--em); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
     /* ── Nav ── */
-    nav {
+    .site-nav {
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: rgba(13,17,23,0.85);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
+      z-index: var(--z-sticky);
+      background: oklch(12% 0.014 255 / 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-rule);
+      padding-inline: var(--space-xl);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 56px;
+      height: var(--header-height);
+      gap: var(--space-lg);
     }
 
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--space-xs);
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
       font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
+      color: var(--color-ink);
+      text-decoration: none;
       letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .nav-logo svg { color: var(--em); }
+    .nav-logo svg { color: var(--color-accent); flex-shrink: 0; }
 
-    nav ul {
+    .nav-links {
       list-style: none;
       display: flex;
-      gap: 1.5rem;
+      gap: var(--space-lg);
       align-items: center;
     }
 
-    nav ul a {
-      color: var(--muted);
-      font-size: 0.875rem;
-      transition: color 0.15s;
+    .nav-links a {
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+      font-weight: 400;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color var(--dur-micro) var(--ease-out);
     }
 
-    nav ul a:hover { color: var(--text); text-decoration: none; }
+    .nav-links a:hover { color: var(--color-ink); }
 
-    .btn {
+    .nav-links a:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-nav {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.45rem 1rem;
-      border-radius: 6px;
-      font-size: 0.875rem;
+      gap: var(--space-2xs);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
       font-weight: 500;
-      transition: all 0.15s;
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-em {
-      background: var(--em);
-      color: #fff;
-    }
-
-    .btn-em:hover { background: var(--em-dim); text-decoration: none; }
-
-    .btn-outline {
+      color: var(--color-neutral);
       background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius-md);
+      padding: var(--space-2xs) var(--space-sm);
+      text-decoration: none;
+      white-space: nowrap;
+      transition:
+        color var(--dur-micro) var(--ease-out),
+        border-color var(--dur-micro) var(--ease-out);
     }
 
-    .btn-outline:hover { border-color: var(--muted); text-decoration: none; }
+    .btn-nav:hover { color: var(--color-ink); border-color: var(--color-muted); }
+
+    .btn-nav:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+      border-radius: var(--radius-md);
+    }
 
     /* ── Hero ── */
     .hero {
       text-align: center;
-      padding: 6rem 2rem 4rem;
-      max-width: 720px;
-      margin: 0 auto;
+      padding-block: var(--space-2xl) var(--space-3xl);
+      padding-inline: var(--space-xl);
+      max-width: 50rem;
+      margin-inline: auto;
     }
 
-    .badge {
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: var(--text-display);
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      margin-block-end: var(--space-xl);
+      overflow-wrap: anywhere;
+      min-width: 0;
+    }
+
+    .hero-badge {
       display: inline-block;
-      background: var(--em-glow);
-      border: 1px solid rgba(16,185,129,0.3);
-      color: var(--em);
-      font-size: 0.75rem;
+      background: oklch(72% 0.17 210 / 0.12);
+      border: 1px solid oklch(72% 0.17 210 / 0.3);
+      color: var(--color-accent);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 0.25rem 0.75rem;
+      padding: var(--space-2xs) var(--space-md);
       border-radius: 999px;
-      margin-bottom: 1.5rem;
+      margin-block-end: var(--space-lg);
     }
 
-    h1 {
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--color-neutral);
+      margin-block-end: var(--space-lg);
+      overflow-wrap: anywhere;
+      min-width: 0;
     }
 
-    h1 span { color: var(--em); }
+    .hero-title em {
+      font-style: normal;
+      color: var(--color-accent);
+    }
 
-    .subtitle {
-      font-size: 1.125rem;
-      color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
+    .hero-sub {
+      font-size: var(--text-md);
+      color: var(--color-muted);
+      max-width: 38rem;
+      margin-inline: auto;
+      margin-block-end: var(--space-xl);
+      line-height: 1.6;
     }
 
     .hero-actions {
       display: flex;
-      gap: 0.75rem;
+      gap: var(--space-sm);
       justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 3rem;
     }
 
-    /* ── Install box ── */
-    .install-section {
-      max-width: 680px;
-      margin: 0 auto 5rem;
-      padding: 0 2rem;
-    }
-
-    .install-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .install-tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .install-tab {
-      padding: 0.6rem 1.25rem;
-      font-size: 0.8rem;
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
       font-weight: 500;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
+      color: var(--color-paper);
+      background: var(--color-accent);
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius-md);
+      padding: var(--space-xs) var(--space-lg);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      min-height: 36px;
+      transition:
+        background-color var(--dur-micro) var(--ease-out),
+        border-color var(--dur-micro) var(--ease-out);
     }
 
-    .install-tab.active {
-      color: var(--em);
-      border-bottom-color: var(--em);
+    .btn-primary:hover { background: var(--color-focus); border-color: var(--color-focus); }
+    .btn-primary:active { transform: translateY(1px); }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+      border-radius: var(--radius-md);
     }
 
-    .install-pane { display: none; padding: 1.25rem; }
-    .install-pane.active { display: block; }
-
-    .code-block {
-      background: var(--bg-code);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
-      font-size: 0.8rem;
-      color: #10b981;
-      overflow-x: auto;
-      white-space: pre;
-      line-height: 1.7;
-      position: relative;
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 400;
+      color: var(--color-neutral);
+      background: transparent;
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius-md);
+      padding: var(--space-xs) var(--space-lg);
+      text-decoration: none;
+      white-space: nowrap;
+      min-height: 36px;
+      transition:
+        color var(--dur-micro) var(--ease-out),
+        border-color var(--dur-micro) var(--ease-out);
     }
 
-    .code-comment { color: var(--muted); }
+    .btn-outline:hover { color: var(--color-ink); border-color: var(--color-muted); }
+    .btn-outline:active { transform: translateY(1px); }
 
-    .copy-btn {
-      position: absolute;
-      top: 0.6rem;
-      right: 0.6rem;
-      background: var(--border);
-      color: var(--muted);
-      border: none;
-      border-radius: 4px;
-      padding: 0.3rem 0.6rem;
-      font-size: 0.7rem;
-      cursor: pointer;
-      transition: all 0.15s;
+    .btn-outline:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 3px;
+      border-radius: var(--radius-md);
     }
 
-    .copy-btn:hover { background: var(--muted); color: var(--text); }
-
-    .install-note {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 0.75rem;
-      padding: 0 0.25rem;
+    /* ── Section layout ── */
+    .section-wrap {
+      max-width: 44rem;
+      margin-inline: auto;
+      padding-inline: var(--space-xl);
+      margin-block-end: var(--space-4xl);
     }
 
-    /* ── Features ── */
-    .features {
-      max-width: 960px;
-      margin: 0 auto 5rem;
-      padding: 0 2rem;
+    .features-wrap {
+      max-width: 64rem;
+      margin-inline: auto;
+      padding-inline: var(--space-xl);
+      margin-block-end: var(--space-4xl);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-block-end: var(--space-2xl);
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-block-end: var(--space-xs);
     }
 
     .section-title {
-      text-align: center;
-      font-size: 1.75rem;
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
       font-weight: 700;
       letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
+      color: var(--color-ink);
+      margin-block-end: var(--space-xs);
+      overflow-wrap: anywhere;
     }
 
     .section-sub {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 3rem;
+      font-size: var(--text-base);
+      color: var(--color-muted);
     }
 
+    /* ── Install card ── */
+    .install-card {
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .tab-rail {
+      display: flex;
+      border-bottom: 1px solid var(--color-rule);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tab-rail::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex-shrink: 0;
+      padding: var(--space-xs) var(--space-md);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-muted);
+      cursor: pointer;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: none;
+      white-space: nowrap;
+      transition:
+        color var(--dur-micro) var(--ease-out),
+        border-color var(--dur-micro) var(--ease-out);
+    }
+
+    .tab-btn[aria-selected="true"] {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
+
+    .tab-btn:hover { color: var(--color-ink); }
+    .tab-btn:active { transform: translateY(1px); }
+
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: -2px;
+    }
+
+    .tab-pane[hidden] { display: none; }
+
+    .tab-pane > .pane-inner {
+      padding: var(--space-lg);
+    }
+
+    .code-wrap {
+      position: relative;
+      margin-block-end: var(--space-sm);
+    }
+
+    .code-block {
+      display: block;
+      background: var(--color-paper-3);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      padding-right: calc(var(--space-lg) + 5rem);
+      font-family: var(--font-code);
+      font-size: var(--text-sm);
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--color-ink);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: pre;
+      tab-size: 2;
+    }
+
+    .code-block .comment { color: var(--color-muted); }
+
+    .copy-btn {
+      position: absolute;
+      top: var(--space-sm);
+      right: var(--space-sm);
+      background: var(--color-paper-2);
+      color: var(--color-muted);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius-sm);
+      padding: var(--space-2xs) var(--space-sm);
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      cursor: pointer;
+      min-height: 28px;
+      white-space: nowrap;
+      transition:
+        color var(--dur-micro) var(--ease-out),
+        border-color var(--dur-micro) var(--ease-out),
+        background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .copy-btn:hover { color: var(--color-ink); border-color: var(--color-muted); background: var(--color-paper-3); }
+    .copy-btn:active { transform: translateY(1px); }
+    .copy-btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+    .copy-btn[data-state="copied"] { color: var(--color-accent); border-color: var(--color-accent-dim); }
+
+    .pane-note {
+      font-size: var(--text-sm);
+      color: var(--color-muted);
+      line-height: 1.65;
+    }
+
+    /* ── Feature grid ── */
     .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+      gap: var(--space-md);
     }
 
     .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
       border-radius: 10px;
-      padding: 1.5rem;
-      transition: border-color 0.2s;
+      padding: var(--space-xl);
+      transition: border-color var(--dur-short) var(--ease-out);
     }
 
-    .feature-card:hover { border-color: rgba(16,185,129,0.4); }
+    .feature-card:hover { border-color: oklch(72% 0.17 210 / 0.4); }
 
     .feature-icon {
       width: 36px;
       height: 36px;
-      background: var(--em-glow);
-      border: 1px solid rgba(16,185,129,0.25);
+      background: oklch(72% 0.17 210 / 0.10);
+      border: 1px solid oklch(72% 0.17 210 / 0.25);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
-      color: var(--em);
+      margin-block-end: var(--space-md);
+      color: var(--color-accent);
+      flex-shrink: 0;
     }
 
     .feature-card h3 {
-      font-size: 1rem;
+      font-family: var(--font-display);
+      font-size: var(--text-base);
       font-weight: 600;
-      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+      color: var(--color-ink);
+      margin-block-end: var(--space-2xs);
     }
 
     .feature-card p {
-      font-size: 0.875rem;
-      color: var(--muted);
-      line-height: 1.55;
+      font-size: var(--text-sm);
+      color: var(--color-muted);
+      line-height: 1.6;
     }
 
-    /* ── Release artifacts ── */
-    .artifacts {
-      max-width: 680px;
-      margin: 0 auto 5rem;
-      padding: 0 2rem;
-    }
-
-    .artifact-list {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+    /* ── Artifacts ── */
+    .artifact-card {
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
       border-radius: 10px;
       overflow: hidden;
     }
@@ -313,83 +461,203 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.875rem;
+      padding: var(--space-sm) var(--space-lg);
+      border-bottom: 1px solid var(--color-rule);
+      gap: var(--space-lg);
+      transition: background-color var(--dur-micro) var(--ease-out);
     }
 
     .artifact-row:last-child { border-bottom: none; }
+    .artifact-row:hover { background: var(--color-paper-3); }
 
     .artifact-name {
-      font-family: monospace;
-      color: var(--em);
+      font-family: var(--font-code);
+      font-size: var(--text-sm);
+      color: var(--color-accent);
+      white-space: nowrap;
     }
 
-    .artifact-desc { color: var(--muted); font-size: 0.8rem; }
-
-    /* ── Security note ── */
-    .security-note {
-      max-width: 680px;
-      margin: 0 auto 5rem;
-      padding: 0 2rem;
+    .artifact-desc {
+      font-size: var(--text-sm);
+      color: var(--color-muted);
+      text-align: right;
+      white-space: nowrap;
     }
 
+    /* ── Security card ── */
     .security-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
       border-radius: 10px;
-      padding: 1.5rem;
+      padding: var(--space-xl);
     }
 
     .security-card h3 {
-      font-size: 1rem;
+      font-family: var(--font-display);
+      font-size: var(--text-base);
       font-weight: 600;
-      margin-bottom: 0.75rem;
+      color: var(--color-ink);
+      margin-block-end: var(--space-md);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--space-xs);
     }
 
-    .security-card h3 svg { color: var(--em); }
+    .security-card h3 svg { color: var(--color-accent); flex-shrink: 0; }
 
     .security-card p {
-      font-size: 0.875rem;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
+      font-size: var(--text-sm);
+      color: var(--color-muted);
+      line-height: 1.65;
+      max-width: 58ch;
+      margin-block-end: var(--space-md);
+    }
+
+    .security-card p:last-child { margin-block-end: 0; }
+
+    .doc-link {
+      color: var(--color-accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-accent-dim);
+      transition: border-bottom-color var(--dur-micro) var(--ease-out);
+    }
+
+    .doc-link:hover { border-bottom-color: var(--color-accent); }
+
+    .doc-link:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    .inline-code {
+      font-family: var(--font-code);
+      font-size: 0.875em;
+      color: var(--color-accent);
+      background: var(--color-paper-3);
+      padding: 0.1em 0.35em;
+      border-radius: var(--radius-sm);
     }
 
     /* ── Footer ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem;
+    .site-footer {
+      border-top: 1px solid var(--color-rule);
+      padding-block: var(--space-xl);
+      padding-inline: var(--space-xl);
+      padding-bottom: max(var(--space-xl), env(safe-area-inset-bottom));
       text-align: center;
-      font-size: 0.8rem;
-      color: var(--muted);
     }
 
-    footer a { color: var(--muted); }
-    footer a:hover { color: var(--text); }
+    .site-footer p {
+      font-family: var(--font-code);
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+      letter-spacing: 0.03em;
+    }
+
+    .site-footer a {
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color var(--dur-micro) var(--ease-out);
+    }
+
+    .site-footer a:hover { color: var(--color-neutral); }
+
+    .site-footer a:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 48rem) {
+      .site-nav { padding-inline: var(--space-md); }
+      .nav-text-links { display: none; }
+
+      .hero {
+        padding-block: var(--space-3xl) var(--space-2xl);
+        padding-inline: var(--space-lg);
+      }
+
+      .section-wrap,
+      .features-wrap { padding-inline: var(--space-lg); }
+
+      .code-block { padding-right: var(--space-lg); }
+
+      .copy-btn {
+        position: static;
+        display: block;
+        margin-block-start: var(--space-xs);
+        width: fit-content;
+      }
+
+      .artifact-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2xs);
+      }
+
+      .artifact-desc { text-align: left; }
+
+      .site-footer { padding-inline: var(--space-lg); }
+    }
   </style>
 </head>
 <body>
 
 <!-- Nav -->
-<nav>
+<nav class="site-nav" role="banner" aria-label="Site navigation">
   <a class="nav-logo" href="/">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-      <path d="M2 17l10 5 10-5"/>
-      <path d="M2 12l10 5 10-5"/>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <defs>
+        <radialGradient id="n-bg" cx="38%" cy="28%" r="72%">
+          <stop offset="0%" stop-color="#1c3f5c"/>
+          <stop offset="45%" stop-color="#0d2238"/>
+          <stop offset="100%" stop-color="#060d18"/>
+        </radialGradient>
+        <linearGradient id="n-ring" x1="12" y1="1" x2="12" y2="23" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#a78bfa"/>
+          <stop offset="45%" stop-color="#60a5fa"/>
+          <stop offset="100%" stop-color="#22d3ee"/>
+        </linearGradient>
+        <filter id="n-rg" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="n-ig" x="-25%" y="-25%" width="150%" height="150%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="n-sg" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="0.9" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <circle cx="12" cy="12" r="11" stroke="url(#n-ring)" stroke-width="1.2" filter="url(#n-rg)"/>
+      <path d="M12 3 L20 7 L20 14 C20 18.5 16.5 21.5 12 22 C7.5 21.5 4 18.5 4 14 L4 7 Z" fill="url(#n-bg)"/>
+      <g stroke="#3cbbd4" stroke-linecap="round" stroke-linejoin="round" filter="url(#n-ig)">
+        <polyline points="8,8 8,9.5 9.5,9.5" stroke-width="1"/>
+        <polyline points="16,8 16,9.5 14.5,9.5" stroke-width="1"/>
+        <polyline points="8,16 8,14.5 9.5,14.5" stroke-width="1"/>
+        <polyline points="16,16 16,14.5 14.5,14.5" stroke-width="1"/>
+        <circle cx="12" cy="12" r="2.5" stroke-width="1"/>
+        <line x1="12" y1="9" x2="12" y2="9.5" stroke-width="0.9"/>
+        <line x1="12" y1="14.5" x2="12" y2="15" stroke-width="0.9"/>
+        <line x1="9" y1="12" x2="9.5" y2="12" stroke-width="0.9"/>
+        <line x1="14.5" y1="12" x2="15" y2="12" stroke-width="0.9"/>
+        <circle cx="12" cy="12" r="0.8" fill="#3cbbd4" stroke="none"/>
+      </g>
+      <path d="M12 3 L20 7 L20 14 C20 18.5 16.5 21.5 12 22 C7.5 21.5 4 18.5 4 14 L4 7 Z" stroke="#3cbbd4" stroke-width="1.2" filter="url(#n-sg)"/>
     </svg>
     Forerunner
   </a>
-  <ul>
-    <li><a href="#install">Install</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#security">Security</a></li>
+  <ul class="nav-links" role="list">
+    <li class="nav-text-links"><a href="#install">Install</a></li>
+    <li class="nav-text-links"><a href="#features">Features</a></li>
+    <li class="nav-text-links"><a href="#security">Security</a></li>
     <li>
-      <a class="btn btn-outline" href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <a class="btn-nav" href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener noreferrer">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
         GitHub
       </a>
     </li>
@@ -398,226 +666,287 @@
 
 <!-- Hero -->
 <section class="hero">
-  <div class="badge">Open Source &bull; v0.2.0</div>
-  <h1>Endpoint detection &amp;<br><span>response</span> built to scale</h1>
-  <p class="subtitle">
+  <h1 class="hero-name">Forerunner</h1>
+  <div class="hero-badge" aria-label="Version">Open Source &bull; v0.2.0</div>
+  <p class="hero-title">Endpoint detection &amp; <em>response</em> built to scale</p>
+  <p class="hero-sub">
     Forerunner is an open-source EDR/XDR platform — deploy agents across your fleet in minutes,
-    correlate threats against MITRE ATT&amp;CK, and respond from a single dashboard.
+    correlate threats against MITRE ATT&amp;CK, and respond from a single self-hosted dashboard.
   </p>
   <div class="hero-actions">
-    <a class="btn btn-em" href="#install">Get started</a>
-    <a class="btn btn-outline" href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener">View on GitHub</a>
+    <a class="btn-primary" href="#install">Get started</a>
+    <a class="btn-outline" href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener noreferrer">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      View on GitHub
+    </a>
   </div>
 </section>
 
 <!-- Install -->
-<section class="install-section" id="install">
+<section class="section-wrap" id="install">
   <div class="install-card">
-    <div class="install-tabs">
-      <button class="install-tab active" onclick="showTab('server')">Server</button>
-      <button class="install-tab" onclick="showTab('agent-linux')">Agent — Linux</button>
-      <button class="install-tab" onclick="showTab('agent-mac')">Agent — macOS</button>
+    <div class="tab-rail" role="tablist" aria-label="Platform">
+      <button class="tab-btn" role="tab" aria-selected="true"  aria-controls="pane-server"  id="tab-server">Server</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="pane-linux"   id="tab-linux">Agent — Linux</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="pane-mac"     id="tab-mac">Agent — macOS</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="pane-windows" id="tab-windows">Agent — Windows</button>
     </div>
 
-    <div class="install-pane active" id="pane-server">
-      <div class="code-block" id="code-server"><span class="code-comment"># Install the Forerunner server (TimescaleDB + Redis + server, all-in-one)</span>
+    <div class="tab-pane" id="pane-server" role="tabpanel" aria-labelledby="tab-server">
+      <div class="pane-inner">
+        <div class="code-wrap">
+          <pre class="code-block" id="code-server"><code><span class="comment"># All-in-one: TimescaleDB + Redis + server binary</span>
 curl -sSL https://github.com/r3d-sparr0w/forerunner/releases/latest/download/install.sh \
-  | sudo bash -- --all-in-one</div>
-      <p class="install-note">
-        Supports Ubuntu 20.04+, Debian 11+, RHEL/Rocky 8+. Installs TimescaleDB, Redis, and the server
-        binary, generates TLS certificates, and starts a systemd service on port 443.
-      </p>
+  | sudo bash -- --all-in-one</code></pre>
+          <button class="copy-btn" data-copy="code-server" aria-label="Copy server install command">
+            <span class="copy-btn__label">copy</span>
+          </button>
+        </div>
+        <p class="pane-note">Supports Ubuntu 20.04+, Debian 11+, RHEL/Rocky 8+. Installs dependencies, generates mTLS certificates, and starts a systemd service on port 443. For split deployments, pass <code class="inline-code">--db-url</code> and <code class="inline-code">--redis-url</code> instead of <code class="inline-code">--all-in-one</code>.</p>
+      </div>
     </div>
 
-    <div class="install-pane" id="pane-agent-linux">
-      <div class="code-block" id="code-agent-linux"><span class="code-comment"># From the Forerunner dashboard: Settings > Agents > Deploy Agent</span>
-<span class="code-comment"># Copy the generated command (includes your enrollment token and server URL):</span>
+    <div class="tab-pane" id="pane-linux" role="tabpanel" aria-labelledby="tab-linux" hidden>
+      <div class="pane-inner">
+        <div class="code-wrap">
+          <pre class="code-block" id="code-linux"><code><span class="comment"># From the dashboard: Settings → Agents → Deploy Agent</span>
+<span class="comment"># Copy the generated command (includes your CA cert, token, and server URL):</span>
 curl -sSL \
   -H "X-Enrollment-Token: &lt;token&gt;" \
-  "https://your-server/api/v1/install/linux-amd64" | sudo bash</div>
-      <p class="install-note">
-        The install command is generated per-platform in the dashboard and bundles your CA certificate,
-        enrollment token, and configuration. Linux agents run as a systemd service.
-      </p>
+  "https://your-server/api/v1/install/linux-amd64" | sudo bash</code></pre>
+          <button class="copy-btn" data-copy="code-linux" aria-label="Copy Linux agent install command">
+            <span class="copy-btn__label">copy</span>
+          </button>
+        </div>
+        <p class="pane-note">Linux agents install as a systemd service. Statically linked (musl) — runs on any libc variant. The install script verifies the agent binary signature before execution.</p>
+      </div>
     </div>
 
-    <div class="install-pane" id="pane-agent-mac">
-      <div class="code-block" id="code-agent-mac"><span class="code-comment"># From the Forerunner dashboard: Settings > Agents > Deploy Agent</span>
+    <div class="tab-pane" id="pane-mac" role="tabpanel" aria-labelledby="tab-mac" hidden>
+      <div class="pane-inner">
+        <div class="code-wrap">
+          <pre class="code-block" id="code-mac"><code><span class="comment"># From the dashboard: Settings → Agents → Deploy Agent</span>
 curl -sSL \
   -H "X-Enrollment-Token: &lt;token&gt;" \
-  "https://your-server/api/v1/install/darwin-arm64" | bash</div>
-      <p class="install-note">
-        macOS agents run as a LaunchDaemon. Apple Silicon and Intel binaries are available.
-        No sudo required for the install command itself.
-      </p>
+  "https://your-server/api/v1/install/darwin-arm64" | bash</code></pre>
+          <button class="copy-btn" data-copy="code-mac" aria-label="Copy macOS agent install command">
+            <span class="copy-btn__label">copy</span>
+          </button>
+        </div>
+        <p class="pane-note">macOS agents run as a LaunchDaemon. Apple Silicon and Intel binaries are available — the install URL detects your architecture automatically.</p>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="pane-windows" role="tabpanel" aria-labelledby="tab-windows" hidden>
+      <div class="pane-inner">
+        <div class="code-wrap">
+          <pre class="code-block" id="code-windows"><code><span class="comment"># Windows agent — run in an elevated PowerShell prompt (Administrator)</span>
+<span class="comment"># Installs as a Windows Service that starts automatically on boot</span>
+Invoke-WebRequest `
+  -Uri "https://your-server/api/v1/install/windows-amd64" `
+  -Headers @{"X-Enrollment-Token" = "&lt;token&gt;"} `
+  -OutFile "$env:TEMP\install-agent.ps1"
+& "$env:TEMP\install-agent.ps1"</code></pre>
+          <button class="copy-btn" data-copy="code-windows" aria-label="Copy Windows agent install command">
+            <span class="copy-btn__label">copy</span>
+          </button>
+        </div>
+        <p class="pane-note">Windows agents (x86_64) install as a Windows service. Requires PowerShell 5.1+ and an Administrator shell.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Features -->
-<section class="features" id="features">
-  <h2 class="section-title">Everything you need. Nothing you don't.</h2>
-  <p class="section-sub">Built for security teams who want visibility without the complexity of commercial EDR.</p>
+<section class="features-wrap" id="features">
+  <div class="section-header">
+    <p class="section-label">Capabilities</p>
+    <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+    <p class="section-sub">Built for security teams who want visibility without the complexity of commercial EDR.</p>
+  </div>
   <div class="feature-grid">
 
     <div class="feature-card">
-      <div class="feature-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M1 6l11 7L23 6"/><rect x="1" y="6" width="22" height="14" rx="2" ry="2"/>
-        </svg>
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
       </div>
       <h3>Real-time telemetry</h3>
-      <p>Process, file, network, and log events streamed from agents via gRPC. Stored in TimescaleDB for high-throughput queries.</p>
+      <p>Process, file, network, and log events streamed from agents via mTLS gRPC. Stored in TimescaleDB for high-throughput queries.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       </div>
       <h3>Detection engine</h3>
-      <p>Write Sigma-style rules with MITRE ATT&amp;CK tagging. The engine evaluates every event and creates deduplicated alerts automatically.</p>
+      <p>Write Sigma-style rules with MITRE ATT&amp;CK tagging. The engine evaluates every event and creates deduplicated, enriched alerts automatically.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-        </svg>
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       </div>
       <h3>Threat intelligence</h3>
-      <p>Track threat actor profiles with MITRE technique mappings. Alerts are automatically enriched with actor attribution when rules fire.</p>
+      <p>Threat actor profiles with MITRE technique mappings. Alerts are automatically enriched with actor attribution when detection rules fire.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-        </svg>
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       </div>
       <h3>Embedded dashboard</h3>
-      <p>Single binary ships the full React dashboard. No separate web server needed — serve and API from the same port 443 endpoint.</p>
+      <p>Single binary ships the full React dashboard. No separate web server — events, alerts, and response all from one port 443 endpoint.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
       <h3>Signed releases</h3>
-      <p>Every binary is signed with an Ed25519 key. The install script verifies signatures before execution — no blind pipe-to-bash.</p>
+      <p>Every binary is Ed25519-signed. Install scripts fetch and verify signatures before execution — no blind pipe-to-bash.</p>
     </div>
 
     <div class="feature-card">
-      <div class="feature-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
-          <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
-        </svg>
+      <div class="feature-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
       </div>
       <h3>Distributed or all-in-one</h3>
-      <p>Run everything on one host with <code>--all-in-one</code>, or split DB, Redis, and the server across separate nodes for production scale.</p>
+      <p>Run everything on one host with <code class="inline-code">--all-in-one</code>, or split DB, cache, and server across nodes for production scale.</p>
     </div>
 
   </div>
 </section>
 
 <!-- Release artifacts -->
-<section class="artifacts" id="artifacts">
-  <h2 class="section-title" style="margin-bottom:1rem;">Release artifacts</h2>
-  <p class="section-sub" style="margin-bottom:2rem;">All binaries are signed. Verify with <code>signing.pub</code> before running.</p>
-  <div class="artifact-list">
+<section class="section-wrap" id="artifacts">
+  <div class="section-header">
+    <p class="section-label">Downloads</p>
+    <h2 class="section-title">Release artifacts</h2>
+    <p class="section-sub">All binaries are Ed25519-signed. Each artifact has a companion <code class="inline-code">.sig</code> file in the GitHub Release.</p>
+  </div>
+  <div class="artifact-card">
     <div class="artifact-row">
       <span class="artifact-name">forerunner-server-linux-amd64</span>
-      <span class="artifact-desc">Server &mdash; Linux x86_64</span>
+      <span class="artifact-desc">Server — Linux x86_64</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-server-linux-arm64</span>
-      <span class="artifact-desc">Server &mdash; Linux ARM64</span>
+      <span class="artifact-desc">Server — Linux ARM64</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-server_*.deb</span>
-      <span class="artifact-desc">Debian/Ubuntu package (amd64)</span>
+      <span class="artifact-desc">Debian / Ubuntu (amd64)</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-server-*.rpm</span>
-      <span class="artifact-desc">RHEL/Rocky/Fedora package (x86_64)</span>
+      <span class="artifact-desc">RHEL / Rocky / Fedora (x86_64)</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-agent-linux-amd64-musl</span>
-      <span class="artifact-desc">Agent &mdash; Linux x86_64 (static, any libc)</span>
+      <span class="artifact-desc">Agent — Linux x86_64, static musl</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-agent-linux-arm64</span>
-      <span class="artifact-desc">Agent &mdash; Linux ARM64</span>
+      <span class="artifact-desc">Agent — Linux ARM64</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-agent-darwin-arm64</span>
-      <span class="artifact-desc">Agent &mdash; macOS Apple Silicon</span>
+      <span class="artifact-desc">Agent — macOS Apple Silicon</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-agent-darwin-amd64</span>
-      <span class="artifact-desc">Agent &mdash; macOS Intel</span>
+      <span class="artifact-desc">Agent — macOS Intel</span>
     </div>
     <div class="artifact-row">
       <span class="artifact-name">forerunner-agent-windows-amd64.exe</span>
-      <span class="artifact-desc">Agent &mdash; Windows x86_64</span>
+      <span class="artifact-desc">Agent — Windows x86_64</span>
     </div>
   </div>
 </section>
 
 <!-- Security -->
-<section class="security-note" id="security">
+<section class="section-wrap" id="security">
   <div class="security-card">
     <h3>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Verifying release signatures
     </h3>
-    <p>
-      Every release artifact has a companion <code>.sig</code> file containing a base64-encoded Ed25519 signature.
-      The public key lives at <a href="/signing.pub">forerunner.offsetsec.io/signing.pub</a>.
-    </p>
-    <div class="code-block"><span class="code-comment"># Download the public key</span>
+    <p>Every release artifact ships with a companion <code class="inline-code">.sig</code> file containing a base64-encoded Ed25519 signature. The signing public key is at <a href="/signing.pub" class="doc-link">forerunner.offsetsec.io/signing.pub</a> and mirrored in the <a href="https://github.com/r3d-sparr0w/forerunner/blob/main/keys/signing.pub" class="doc-link" target="_blank" rel="noopener noreferrer">source repository</a>.</p>
+    <div class="code-wrap">
+      <pre class="code-block" id="code-verify"><code><span class="comment"># Fetch the public key</span>
 curl -sSLO https://forerunner.offsetsec.io/signing.pub
 
-<span class="code-comment"># Verify a binary (e.g., the Linux amd64 agent)</span>
+<span class="comment"># Verify a binary — example: Linux amd64 agent</span>
 base64 -d forerunner-agent-linux-amd64-musl.sig > sig.raw
 openssl pkeyutl -verify -pubin -inkey signing.pub \
   -rawin -in forerunner-agent-linux-amd64-musl \
-  -sigfile sig.raw && echo "Signature valid"</div>
-    <p style="margin-top:0.75rem;">
-      The install scripts fetch <code>signing.pub</code> automatically and verify every artifact
-      before installation. You can also review the key fingerprint in the
-      <a href="https://github.com/r3d-sparr0w/forerunner/blob/main/keys/signing.pub" target="_blank" rel="noopener">source repository</a>.
-    </p>
+  -sigfile sig.raw && echo "Signature valid"</code></pre>
+      <button class="copy-btn" data-copy="code-verify" aria-label="Copy verification commands">
+        <span class="copy-btn__label">copy</span>
+      </button>
+    </div>
+    <p>Install scripts fetch <code class="inline-code">signing.pub</code> automatically and verify every artifact before installation. You can also review the key fingerprint in the <a href="https://github.com/r3d-sparr0w/forerunner" class="doc-link" target="_blank" rel="noopener noreferrer">source repository</a>.</p>
   </div>
 </section>
 
 <!-- Footer -->
-<footer>
+<footer class="site-footer" role="contentinfo">
   <p>
-    Forerunner is open-source software released under the
-    <a href="https://github.com/r3d-sparr0w/forerunner/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+    <a href="https://github.com/r3d-sparr0w/forerunner/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
     &nbsp;&bull;&nbsp;
-    <a href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener">GitHub</a>
+    v0.2.0
+    &nbsp;&bull;&nbsp;
+    <a href="https://github.com/r3d-sparr0w/forerunner" target="_blank" rel="noopener noreferrer">github.com/r3d-sparr0w/forerunner</a>
     &nbsp;&bull;&nbsp;
     <a href="/signing.pub">signing.pub</a>
     &nbsp;&bull;&nbsp;
-    <a href="https://github.com/r3d-sparr0w/forerunner/releases" target="_blank" rel="noopener">Releases</a>
+    <a href="https://github.com/r3d-sparr0w/forerunner/releases" target="_blank" rel="noopener noreferrer">releases</a>
+    &nbsp;&bull;&nbsp;
+    2026
   </p>
 </footer>
 
 <script>
-  function showTab(id) {
-    document.querySelectorAll('.install-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.install-pane').forEach(p => p.classList.remove('active'));
-    document.getElementById('pane-' + id).classList.add('active');
-    event.target.classList.add('active');
-  }
+  // Copy-to-clipboard — silent success (label swap only)
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const pre = document.getElementById(btn.dataset.copy);
+      if (!pre) return;
+      try {
+        await navigator.clipboard.writeText(pre.textContent.trim());
+        btn.dataset.state = 'copied';
+        btn.querySelector('.copy-btn__label').textContent = '✓ copied';
+        setTimeout(() => {
+          delete btn.dataset.state;
+          btn.querySelector('.copy-btn__label').textContent = 'copy';
+        }, 2500);
+      } catch { /* clipboard unavailable — fail silently */ }
+    });
+  });
+
+  // ARIA-compliant tab switching
+  document.querySelectorAll('.tab-rail').forEach(rail => {
+    const tabs = [...rail.querySelectorAll('.tab-btn')];
+    const card = rail.closest('.install-card');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+        card.querySelectorAll('.tab-pane').forEach(p => { p.hidden = true; });
+        tab.setAttribute('aria-selected', 'true');
+        document.getElementById(tab.getAttribute('aria-controls')).hidden = false;
+        tab.focus({ preventScroll: true });
+      });
+
+      tab.addEventListener('keydown', e => {
+        const idx = tabs.indexOf(tab);
+        if (e.key === 'ArrowRight') { e.preventDefault(); tabs[(idx + 1) % tabs.length].click(); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); tabs[(idx - 1 + tabs.length) % tabs.length].click(); }
+        if (e.key === 'Home')       { e.preventDefault(); tabs[0].click(); }
+        if (e.key === 'End')        { e.preventDefault(); tabs[tabs.length - 1].click(); }
+      });
+    });
+  });
 </script>
 
 </body>
